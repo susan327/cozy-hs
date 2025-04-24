@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% block title %}お知らせ投稿{% endblock %}
+
+{% block content %}
+<section class="post">
+  <h1>お知らせ投稿フォーム</h1>
+  <form action="/post" method="post" enctype="multipart/form-data">
+    <label for="title">タイトル：</label>
+    <input type="text" id="title" name="title" required><br><br>
+
+    <label for="body">本文：</label><br>
+    <textarea id="body" name="body" rows="4" required></textarea><br><br>
+
+    <label for="image">画像（任意）：</label>
+    <input type="file" id="image" name="image" accept="image/*" onchange="previewImage()"><br><br>
+
+    <div id="preview" style="margin-bottom: 1em;"></div>
+
+    <button type="submit" style="padding: 0.6em 1.5em; font-size: 1.1em; background-color: #007acc; color: white; border: none; border-radius: 6px;">投稿</button>
+  </form>
+
+  <hr>
+
+  <h2>投稿済みのお知らせ</h2>
+  <div id="postList"></div>
+</section>
+
+<!-- JSファイルを分離して読み込み（改行反映・画像プレビュー含む） -->
+<script src="{{ url_for('static', filename='post.js') }}"></script>
+{% endblock %}

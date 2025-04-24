@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+
+{% block title %}営業日カレンダー管理{% endblock %}
+
+{% block content %}
+<h2>営業日カレンダー管理（クリックで休業日登録／解除）</h2>
+<div id="calendar-container"></div>
+<p style="font-size: 0.9em;">■ 赤色：定休日 ／ 休業日</p>
+
+<script src="{{ url_for('static', filename='calendar_admin.js') }}"></script>
+{% endblock %}

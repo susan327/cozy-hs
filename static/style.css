@@ -1,0 +1,438 @@
+/* ------------------------------
+  共通設定 / 全体構成
+------------------------------ */
+body {
+  margin: 0;
+  font-family: "Noto Sans JP", "Yu Gothic", "Meiryo", sans-serif;
+  background-image: url("/static/images/brick.jpg");
+  background-size: cover;
+  background-attachment: fixed;
+  background-repeat: repeat;
+  color: #3c2f1c;
+}
+
+
+main {
+  padding: 2em;
+  background-color: rgba(255, 255, 255, 0.95);
+  margin: 2em auto;
+  max-width: 960px;
+  border-radius: 12px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.2);
+}
+
+/* ------------------------------
+  ヘッダー / ナビバー
+------------------------------ */
+header, footer {
+  background-color: rgba(255, 250, 240, 0.9);
+  padding: 1.2em;
+  text-align: center;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+  border-bottom: 2px solid #d2b48c;
+}
+
+h1 {
+  margin: 0.3em 0;
+  font-weight: bold;
+  font-size: 1.6em;
+}
+
+.nav-list {
+  list-style: none;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 1em;
+  margin-top: 0.5em;
+}
+
+.nav-list li a {
+  display: inline-block;
+  padding: 0.5em 1em;
+  border: 2px solid #8b5e3c;
+  border-radius: 8px;
+  background-color: #fffaf0;
+  color: #5e3f1b;
+  font-weight: bold;
+  text-decoration: none;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+.nav-list li a:hover {
+  background-color: #8b5e3c;
+  color: white;
+}
+
+/* ------------------------------
+  セクション共通スタイル
+------------------------------ */
+section {
+  background-color: #fffaf4;
+  border-radius: 12px;
+  padding: 2em;
+  margin: 2em auto;
+  max-width: 960px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+}
+
+section h2 {
+  font-size: 1.6em;
+  margin-bottom: 1em;
+  color: #5e3f1b;
+  border-bottom: 2px solid #d2b48c;
+  padding-bottom: 0.3em;
+}
+
+
+/* ------------------------------
+  投稿カード（お知らせ）
+------------------------------ */
+.card {
+  border: 2px solid #deb887;
+  background-color: #fff8dc;
+  padding: 1em;
+  border-radius: 10px;
+  margin-bottom: 1.5em;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+.card .title {
+  font-size: 1.2em;
+  font-weight: bold;
+  color: #5c3a1e;
+}
+
+.card .date {
+  font-size: 0.9em;
+  color: #777;
+  margin-bottom: 0.5em;
+}
+
+.card img {
+  max-width: 300px;
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  margin-top: 0.5em;
+}
+
+/* ------------------------------
+  カレンダースタイル
+------------------------------ */
+.calendar {
+  width: 100%;
+  max-width: 700px;
+  margin: 0 auto;
+  border-collapse: collapse;
+  table-layout: fixed;
+}
+
+.calendar th,
+.calendar td {
+  width: 14.28%;
+  aspect-ratio: 1 / 1;
+  padding: 0;
+  border: 1px solid #d8c7a0;
+  text-align: center;
+  vertical-align: middle;
+}
+
+.cell-content {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
+
+.cell-content .date {
+  font-size: 1em;
+}
+
+.cell-content .label {
+  font-size: 0.7em;
+  margin-top: 0.2em;
+  color: #555;
+}
+
+/* 定休日背景 */
+/* カレンダー全体レイアウト */
+.calendar {
+  width: 100%;
+  max-width: 700px;
+  margin: 2em auto;
+  border-collapse: collapse;
+  table-layout: fixed;
+  font-size: 1.1em; /* 全体の文字大きめに */
+}
+
+.calendar caption {
+  font-weight: bold;
+  font-size: 1.4em; /* タイトルも大きく */
+  padding: 0.5em;
+  background-color: #fffaf0;
+  border-radius: 8px 8px 0 0;
+}
+
+/* --- ✅ 曜日ヘッダー調整 --- */
+.calendar th {
+  padding: 0.5em 0;
+  background-color: #fffdf5;
+  font-size: 1em;
+  height: 2.5em; /* 高さを明示的に確保 */
+}
+
+/* --- ✅ 正方形セル --- */
+.calendar td {
+  position: relative;
+  width: 14.28%;
+  padding: 0;
+  border: 1px solid #d8c7a0;
+  background-color: #fffef8;
+  vertical-align: middle;
+  text-align: center;
+  line-height: 0;
+}
+
+.calendar td::before {
+  content: "";
+  display: block;
+  padding-top: 100%;
+}
+
+.calendar td .cell-content {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: bold;
+  font-size: 1.4em; /* ✅ 数字を大きく */
+  z-index: 1;
+}
+
+/* --- ✅ 休業日（赤） --- */
+.calendar td.holiday {
+  background-color: #f88;
+  color: white;
+}
+
+/* --- ✅ スマホ対応 --- */
+@media (max-width: 768px) {
+  .calendar {
+    font-size: 0.95em;
+  }
+
+  .calendar caption {
+    font-size: 1.1em;
+  }
+
+  .calendar td .cell-content {
+    font-size: 1.2em;
+  }
+}
+
+
+
+
+
+/* ------------------------------
+  ギャラリー（コンセプト等）
+------------------------------ */
+.concept-gallery {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 1em;
+  margin-top: 1em;
+}
+
+.concept-gallery img {
+  width: 100%;
+  border-radius: 6px;
+  object-fit: cover;
+}
+
+/* ------------------------------
+  バナー表示
+------------------------------ */
+.banner-slider {
+  width: 100%;
+  max-width: 100%;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  position: relative;
+}
+
+.banner-slider .slide {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0;
+  transition: opacity 1.5s ease-in-out;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.banner-slider .slide.active {
+  opacity: 1;
+  z-index: 1;
+}
+/* パソコン表示用：画面が768pxより広いときだけ適用 */
+@media (min-width: 769px) {
+  .banner-slider {
+    max-width: 70%;      /* 横幅を画面の90%に絞る */
+    margin: 0 auto;      /* 中央寄せ */
+    border-radius: 10px; /* オプション：角丸にしてもかわいい */
+  }
+}
+
+
+
+
+
+/* ------------------------------
+  ボタン＆フォーム系
+------------------------------ */
+input[type="text"] {
+  width: 100%;
+  max-width: 600px;
+  padding: 0.8em;
+  margin: 0.6em 0;
+  border: 1px solid #bda27a;
+  border-radius: 10px;
+  font-size: 1.2em;  /* ← 大きくする */
+  font-family: "Noto Sans JP", "Yu Gothic", "Meiryo", sans-serif; /* ← ゴシック体 */
+  background-color: #fffaf2;
+}
+
+textarea {
+  width: 100%;
+  max-width: 600px;
+  height: 240px;       /* ← 高さもアップ */
+  padding: 0.8em;
+  margin: 0.6em 0;
+  border: 1px solid #bda27a;
+  border-radius: 10px;
+  font-size: 1.2em;    /* ← 本文も大きく！ */
+  font-family: "Noto Sans JP", "Yu Gothic", "Meiryo", sans-serif;
+  background-color: #fffaf2;
+}
+
+
+button {
+  background: linear-gradient(#a67641, #8b5e3c);
+  color: white;
+  font-weight: bold;
+  border: none;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+button:hover {
+  background: linear-gradient(#8b5e3c, #704626);
+}
+.logo {
+  padding: 10px 0;
+  display: flex;
+  justify-content: flex-start;
+}
+
+.logo img {
+  width: 100%;
+  max-width: none;      /* ← 上限なしにする */
+  height: auto;
+  margin-left: 0;       /* ← 左端ぴったりから */
+}
+
+/* PC用：横並び */
+/* PCでは横並び */
+.color-list {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  column-gap: 1em;
+  row-gap: 0.5em;
+  margin-bottom: 2em;
+}
+
+.color-list dt {
+  font-weight: bold;
+  white-space: nowrap;
+}
+
+.color-list dd {
+  margin: 0;
+}
+
+/* 📱スマホでは2段構成に切り替え！ */
+@media (max-width: 768px) {
+  .color-list {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .color-list dt,
+  .color-list dd {
+    display: block;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    white-space: normal;
+    word-break: break-word;
+  }
+
+  .color-list dt {
+    font-weight: bold;
+    margin-top: 1em;
+    font-size: 1em;
+  }
+
+  .color-list dd {
+    margin-left: 0.5em;
+    font-size: 0.95em;
+  }
+}
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 2em;
+}
+
+th, td {
+  padding: 0.5em;
+  text-align: left;
+}
+
+@media (max-width: 768px) {
+  .page-color table,
+  .page-color tbody,
+  .page-color tr,
+  .page-color th,
+  .page-color td {
+    display: block;
+    width: 100%;
+  }
+
+  .page-color th {
+    font-weight: bold;
+    margin-top: 1em;
+    background-color: #f9f9f9;
+  }
+
+  .page-color td {
+    margin-bottom: 1em;
+  }
+}
+.catchphrase {
+  text-align: center;
+  font-size: 0.95em;
+  color: #5a4732;
+  background-color: #fdf8f2;
+  padding: 0.8em;
+  font-weight: bold;
+  border-bottom: 1px solid #e0d0b0;
+}
+
