@@ -102,11 +102,10 @@ def post_page():
     if request.method == "POST":
         title = request.form.get("title")
         body = request.form.get("body").replace("\r\n", "\n").replace("\r", "\n")
-        print("DEBUG: POST body =", repr(body))
-
         file = request.files.get("image")
-        image_url = ""
+        print("📥 投稿受け取り成功！", title)  # ←ここ！
 
+        image_url = ""
         if file and file.filename:
             filename = secure_filename(file.filename)
             filepath = os.path.join(UPLOAD_FOLDER, filename)
@@ -122,12 +121,16 @@ def post_page():
         }
 
         posts = load_json(NEWS_FILE)
+        print("📄 JSON読み込み成功！件数:", len(posts))  # ←ここ！
+
         posts.append(new_post)
         save_json(posts, NEWS_FILE)
+        print("✅ JSON保存成功！")  # ←ここ！
 
         return redirect(url_for("post_page"))
 
     return render_template("post.html")
+
 
 @app.route("/delete/<int:post_id>", methods=["POST"])
 def delete_post(post_id):
