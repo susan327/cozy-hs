@@ -94,9 +94,38 @@ def calendar():
         return redirect(url_for("login"))
     return render_template("calendar.html")
 
+import os
+import json
+import time
 import logging
+from flask import request, render_template, redirect, url_for, session
+from datetime import datetime
+from werkzeug.utils import secure_filename
+
+# ログ設定
 logging.basicConfig(level=logging.INFO)
 
+# 絶対パス指定でファイルの場所を明確に
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+UPLOAD_FOLDER = os.path.join(BASE_DIR, "static", "uploads")
+NEWS_FILE = os.path.join(BASE_DIR, "static", "newsPosts.json")
+
+# 保存関数
+def load_json(path):
+    if os.path.exists(path):
+        with open(path, "r", encoding="utf-8") as f:
+            return json.load(f)
+    return []
+
+def save_json(data, path):
+    try:
+        with open(path, "w", encoding="utf-8") as f:
+            json.dump(data, f, ensure_ascii=False, indent=2)
+        logging.info("✅ JSON保存成功: %s", path)
+    except Exception as e:
+        logging.error("❌ JSON保存失敗: %s", e)
+
+# 投稿ルート
 @app.route("/post", methods=["GET", "POST"])
 def post_page():
     if not session.get("logged_in"):
@@ -106,7 +135,6 @@ def post_page():
         title = request.form.get("title")
         body = request.form.get("body", "").replace("\r\n", "\n").replace("\r", "\n")
         file = request.files.get("image")
-
         logging.info("📥 投稿フォーム受信：タイトル=%s", title)
 
         image_url = ""
@@ -116,7 +144,7 @@ def post_page():
             try:
                 file.save(filepath)
                 image_url = f"/static/uploads/{filename}"
-                logging.info("🖼 画像保存成功：%s", image_url)
+                logging.info("🖼 画像保存成功: %s", image_url)
             except Exception as e:
                 logging.error("❌ 画像保存失敗: %s", e)
 
@@ -128,21 +156,11 @@ def post_page():
             "timestamp": datetime.now().isoformat()
         }
 
-        try:
-            posts = load_json(NEWS_FILE)
-            logging.info("📄 JSON読み込み成功！現在の件数：%d", len(posts))
-        except Exception as e:
-            logging.error("❌ JSON読み込み失敗: %s", e)
-            posts = []
+        posts = load_json(NEWS_FILE)
+        logging.info("📄 JSON読み込み成功：件数=%d", len(posts))
 
         posts.append(new_post)
-
-        try:
-            with open(NEWS_FILE, "w", encoding="utf-8") as f:
-                json.dump(posts, f, ensure_ascii=False, indent=2)
-            logging.info("✅ JSON保存成功！新しい件数：%d", len(posts))
-        except Exception as e:
-            logging.error("❌ JSON保存失敗: %s", e)
+        save_json(posts, NEWS_FILE)
 
         return redirect(url_for("post_page"))
 
