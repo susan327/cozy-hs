@@ -94,6 +94,9 @@ def calendar():
         return redirect(url_for("login"))
     return render_template("calendar.html")
 
+import logging
+logging.basicConfig(level=logging.INFO)
+
 @app.route("/post", methods=["GET", "POST"])
 def post_page():
     if not session.get("logged_in"):
@@ -101,16 +104,21 @@ def post_page():
 
     if request.method == "POST":
         title = request.form.get("title")
-        body = request.form.get("body").replace("\r\n", "\n").replace("\r", "\n")
+        body = request.form.get("body", "").replace("\r\n", "\n").replace("\r", "\n")
         file = request.files.get("image")
-        print("📥 投稿受け取り成功！", title)  # ←ここ！
+
+        logging.info("📥 投稿フォーム受信：タイトル=%s", title)
 
         image_url = ""
         if file and file.filename:
             filename = secure_filename(file.filename)
             filepath = os.path.join(UPLOAD_FOLDER, filename)
-            file.save(filepath)
-            image_url = f"/static/uploads/{filename}"
+            try:
+                file.save(filepath)
+                image_url = f"/static/uploads/{filename}"
+                logging.info("🖼 画像保存成功：%s", image_url)
+            except Exception as e:
+                logging.error("❌ 画像保存失敗: %s", e)
 
         new_post = {
             "id": int(time.time()),
@@ -120,12 +128,21 @@ def post_page():
             "timestamp": datetime.now().isoformat()
         }
 
-        posts = load_json(NEWS_FILE)
-        print("📄 JSON読み込み成功！件数:", len(posts))  # ←ここ！
+        try:
+            posts = load_json(NEWS_FILE)
+            logging.info("📄 JSON読み込み成功！現在の件数：%d", len(posts))
+        except Exception as e:
+            logging.error("❌ JSON読み込み失敗: %s", e)
+            posts = []
 
         posts.append(new_post)
-        save_json(posts, NEWS_FILE)
-        print("✅ JSON保存成功！")  # ←ここ！
+
+        try:
+            with open(NEWS_FILE, "w", encoding="utf-8") as f:
+                json.dump(posts, f, ensure_ascii=False, indent=2)
+            logging.info("✅ JSON保存成功！新しい件数：%d", len(posts))
+        except Exception as e:
+            logging.error("❌ JSON保存失敗: %s", e)
 
         return redirect(url_for("post_page"))
 
